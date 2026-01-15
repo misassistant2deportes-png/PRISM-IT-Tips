@@ -128,7 +128,7 @@
 			<article class="tip" data-cat="network" data-title="Can't connect to Wi‑Fi" draggable="true">
 				<h3>Can't connect to Wi‑Fi</h3>
 				<div class="tags">Category: Network</div>
-				<div class="steps">
+			<div class="steps" data-raw="1. Confirm Wi‑Fi is enabled on the device.&#10;2. Forget the SSID and reconnect with correct password.&#10;3. Reboot the router if multiple devices affected.">
 					1. Confirm Wi‑Fi is enabled on the device.<br>
 					2. Forget the SSID and reconnect with correct password.<br>
 					3. Reboot the router if multiple devices affected.
@@ -139,7 +139,7 @@
 			<article class="tip" data-cat="software" data-title="Application is slow or freezing" draggable="true">
 				<h3>Application is slow or freezing</h3>
 				<div class="tags">Category: Software</div>
-				<div class="steps">
+			<div class="steps" data-raw="1. Check Task Manager for high CPU/RAM usage.&#10;2. Update the app and OS to latest patches.&#10;3. Clear app cache or reinstall if needed.">
 					1. Check Task Manager for high CPU/RAM usage.<br>
 					2. Update the app and OS to latest patches.<br>
 					3. Clear app cache or reinstall if needed.
@@ -150,7 +150,7 @@
 			<article class="tip" data-cat="hardware" data-title="Laptop won't power on" draggable="true">
 				<h3>Laptop won't power on</h3>
 				<div class="tags">Category: Hardware</div>
-				<div class="steps">
+			<div class="steps" data-raw="1. Verify power adapter LED and outlet.&#10;2. Remove battery (if removable), hold power 15s, then retry.&#10;3. If still dead, escalate for hardware repair.">
 					1. Verify power adapter LED and outlet.<br>
 					2. Remove battery (if removable), hold power 15s, then retry.<br>
 					3. If still dead, escalate for hardware repair.
@@ -161,7 +161,7 @@
 			<article class="tip" data-cat="accounts" data-title="Forgot password or can't sign in" draggable="true">
 				<h3>Forgot password / can't sign in</h3>
 				<div class="tags">Category: Accounts</div>
-				<div class="steps">
+			<div class="steps" data-raw="1. Confirm username and caps-lock state.&#10;2. Reset password via single-sign-on or ticket with IT.&#10;3. Check account lockout policy if repeated failures.">
 					1. Confirm username and caps-lock state.<br>
 					2. Reset password via single-sign-on or ticket with IT.<br>
 					3. Check account lockout policy if repeated failures.
@@ -172,7 +172,7 @@
 			<article class="tip" data-cat="network" data-title="VPN won't connect" draggable="true">
 				<h3>VPN won't connect</h3>
 				<div class="tags">Category: Network</div>
-				<div class="steps">
+			<div class="steps" data-raw="1. Confirm internet access is available.&#10;2. Re-enter VPN credentials and ensure MFA completed.&#10;3. Restart VPN client and check for known outages.">
 					1. Confirm internet access is available.<br>
 					2. Re-enter VPN credentials and ensure MFA completed.<br>
 					3. Restart VPN client and check for known outages.
@@ -183,7 +183,7 @@
 			<article class="tip" data-cat="software" data-title="Email not syncing" draggable="true">
 				<h3>Email not syncing</h3>
 				<div class="tags">Category: Software</div>
-				<div class="steps">
+			<div class="steps" data-raw="1. Check server status and account settings.&#10;2. Remove and re-add the account or reconfigure Mail client.&#10;3. If mobile, ensure Background App Refresh / sync enabled.">
 					1. Check server status and account settings.<br>
 					2. Remove and re-add the account or reconfigure Mail client.<br>
 					3. If mobile, ensure Background App Refresh / sync enabled.
@@ -220,11 +220,11 @@
 
 	<!-- View Tip Modal -->
 	<div id="viewModal" style="display:none;position:fixed;inset:0;background:rgba(2,6,23,0.5);align-items:center;justify-content:center;padding:20px;z-index:100">
-		<div style="background:#fff;border-radius:12px;padding:24px;max-width:600px;width:100%;box-shadow:0 12px 36px rgba(2,6,23,0.15);position:relative;max-height:80vh;overflow-y:auto">
-			<button id="closeViewModal" style="position:absolute;top:16px;right:16px;background:none;border:none;font-size:1.5rem;cursor:pointer;color:#6b7280">✕</button>
-			<h2 id="viewTipTitle" style="margin:0 0 8px;font-size:1.3rem;padding-right:32px"></h2>
+		<div style="background:var(--card);border-radius:12px;padding:24px;max-width:600px;width:100%;box-shadow:0 12px 36px rgba(2,6,23,0.15);position:relative;max-height:80vh;overflow-y:auto">
+			<button id="closeViewModal" style="position:absolute;top:16px;right:16px;background:none;border:none;font-size:1.5rem;cursor:pointer;color:var(--muted)">✕</button>
+			<h2 id="viewTipTitle" style="margin:0 0 8px;font-size:1.3rem;padding-right:32px;color:var(--text);font-weight:700"></h2>
 			<div id="viewTipCategory" style="display:inline-block;font-size:0.82rem;color:#fff;margin-bottom:16px;padding:6px 10px;border-radius:8px;background:var(--accent)"></div>
-			<div id="viewTipSteps" style="font-size:0.95rem;color:#111;line-height:1.6;margin-bottom:16px;border-top:1px solid #e5e7eb;padding-top:16px"></div>
+			<div id="viewTipSteps" style="font-size:0.95rem;color:var(--text);line-height:1.6;margin-bottom:16px;border-top:1px solid rgba(15,23,42,0.1);padding-top:16px"></div>
 			<button id="copyFromModal" style="background:var(--accent);color:#fff;border:0;padding:10px 14px;border-radius:8px;cursor:pointer;font-weight:600">Copy steps</button>
 		</div>
 	</div>
@@ -395,7 +395,7 @@ https://misassistant2deportes-png.github.io/PRISM-IT-Tips/
 				tipEl.addEventListener('drop', tipEl.__drop);
 			});
 		}
-		}
+		
 
 		function attachMenuButtons(){
 			document.querySelectorAll('.menu-btn').forEach(btn => {
