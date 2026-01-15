@@ -243,7 +243,10 @@
 			<h2 id="viewTipTitle" style="margin:0 0 8px;font-size:1.3rem;padding-right:32px;color:var(--text);font-weight:700"></h2>
 			<div id="viewTipCategory" style="display:inline-block;font-size:0.82rem;color:#fff;margin-bottom:16px;padding:6px 10px;border-radius:8px;background:var(--accent)"></div>
 			<div id="viewTipSteps" style="font-size:0.95rem;color:var(--text);line-height:1.6;margin-bottom:16px;border-top:1px solid rgba(15,23,42,0.1);padding-top:16px"></div>
-			<button id="copyFromModal" style="background:var(--accent);color:#fff;border:0;padding:10px 14px;border-radius:8px;cursor:pointer;font-weight:600">Copy steps</button>
+			<div style="display:flex;gap:10px">
+				<button id="copyFromModal" style="background:var(--accent);color:#fff;border:0;padding:10px 14px;border-radius:8px;cursor:pointer;font-weight:600">Copy steps</button>
+				<button id="copyLinkToModal" style="background:var(--accent-2);color:#fff;border:0;padding:10px 14px;border-radius:8px;cursor:pointer;font-weight:600">Copy link</button>
+			</div>
 		</div>
 	</div>
 https://misassistant2deportes-png.github.io/PRISM-IT-Tips/
@@ -575,6 +578,27 @@ https://misassistant2deportes-png.github.io/PRISM-IT-Tips/
 			});
 		}
 
+		const copyLinkBtn = document.getElementById('copyLinkToModal');
+		if(copyLinkBtn) {
+			copyLinkBtn.addEventListener('click', (e) => {
+				const btn = e.currentTarget;
+				const title = document.getElementById('viewTipTitle').innerText;
+				const cat = document.getElementById('viewTipCategory').innerText.replace('Category: ', '').toLowerCase();
+				
+				const baseUrl = window.location.origin + window.location.pathname;
+				const tipLink = `${baseUrl}#tip=${encodeURIComponent(title)}&cat=${cat}`;
+				
+				navigator.clipboard.writeText(tipLink).then(()=>{
+					const prev = btn.textContent;
+					btn.textContent = 'Link copied!';
+					setTimeout(()=> btn.textContent = prev,1400);
+				}).catch((err)=>{
+					console.error('Copy link error:', err);
+					alert('Error copying link');
+				});
+			});
+		}
+
 		tipForm.addEventListener('submit', e=>{
 			e.preventDefault();
 			const title = document.getElementById('tipTitle').value.trim();
@@ -617,6 +641,26 @@ https://misassistant2deportes-png.github.io/PRISM-IT-Tips/
 		document.addEventListener('DOMContentLoaded', ()=>{
 			loadStoredTips();
 			applyFilter();
+			
+			// Handle tip link from hash (e.g., #tip=Title&cat=software)
+			const hash = window.location.hash.slice(1);
+			if(hash) {
+				const params = new URLSearchParams(hash);
+				const tipTitle = decodeURIComponent(params.get('tip') || '');
+				const tipCat = params.get('cat') || '';
+				
+				if(tipTitle && tipCat) {
+					setTimeout(() => {
+						const tipEl = Array.from(document.querySelectorAll('.tip')).find(t => 
+							t.dataset.title === tipTitle && t.dataset.cat === tipCat
+						);
+						if(tipEl) {
+							// Trigger the click to open modal
+							tipEl.click();
+						}
+					}, 100);
+				}
+			}
 		});
 	</script>
 </body>
