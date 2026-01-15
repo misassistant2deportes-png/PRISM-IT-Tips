@@ -444,16 +444,14 @@ https://misassistant2deportes-png.github.io/PRISM-IT-Tips/
 					const title = tip.dataset.title;
 					const cat = tip.dataset.cat;
 					
-					if(confirm(`Delete "${title}"?`)) {
-						const raw = localStorage.getItem(STORAGE_KEY);
-						const arr = JSON.parse(raw || '[]');
-						const idx = arr.findIndex(t => t.title === title && t.cat === cat);
-						if(idx >= 0) {
-							arr.splice(idx, 1);
-							localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
-							tip.remove();
-							applyFilter();
-						}
+					const raw = localStorage.getItem(STORAGE_KEY);
+					const arr = JSON.parse(raw || '[]');
+					const idx = arr.findIndex(t => t.title === title && t.cat === cat);
+					if(idx >= 0) {
+						arr.splice(idx, 1);
+						localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+						tip.remove();
+						applyFilter();
 					}
 				};
 				btn.__deleteHandler = handler;
