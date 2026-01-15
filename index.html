@@ -73,6 +73,24 @@
 		button.copy{margin-top:12px;background:var(--accent);color:#fff;border:0;padding:8px 12px;border-radius:8px;cursor:pointer;font-weight:600;transition:opacity .2s ease}
 		button.copy:hover{opacity:0.9}
 
+		@keyframes shrinkDelete{
+			from{
+				opacity:1;
+				transform:scale(1);
+				margin:0;
+			}
+			to{
+				opacity:0;
+				transform:scale(0);
+				margin:0;
+			}
+		}
+
+		.tip.deleting{
+			animation:shrinkDelete 0.4s ease-out forwards;
+			pointer-events:none;
+		}
+
 		footer{margin-top:28px;color:var(--muted);font-size:0.92rem}
 
 		/* Modal tweaks */
@@ -444,15 +462,18 @@ https://misassistant2deportes-png.github.io/PRISM-IT-Tips/
 					const title = tip.dataset.title;
 					const cat = tip.dataset.cat;
 					
-					const raw = localStorage.getItem(STORAGE_KEY);
-					const arr = JSON.parse(raw || '[]');
-					const idx = arr.findIndex(t => t.title === title && t.cat === cat);
-					if(idx >= 0) {
-						arr.splice(idx, 1);
-						localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
-						tip.remove();
-						applyFilter();
-					}
+					tip.classList.add('deleting');
+					setTimeout(() => {
+						const raw = localStorage.getItem(STORAGE_KEY);
+						const arr = JSON.parse(raw || '[]');
+						const idx = arr.findIndex(t => t.title === title && t.cat === cat);
+						if(idx >= 0) {
+							arr.splice(idx, 1);
+							localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+							tip.remove();
+							applyFilter();
+						}
+					}, 400);
 				};
 				btn.__deleteHandler = handler;
 				btn.addEventListener('click', handler);
