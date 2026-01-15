@@ -3,7 +3,12 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<meta name="description" content="Quick, searchable IT troubleshooting tips your team can use and share. Filter by category, copy steps, and save custom tips locally.">
+	<meta name="theme-color" content="#2563eb">
+	<meta name="color-scheme" content="light dark">
 	<title>IT Troubleshooting Tips</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 	<style>
 		:root{
@@ -15,6 +20,11 @@
 			--muted:#6b7280;
 			--text:#0f172a;
 			--glass: rgba(255,255,255,0.7);
+			--ring: rgba(37,99,235,0.35);
+			--border: rgba(15,23,42,0.08);
+			--shadow-sm: 0 6px 18px rgba(2,6,23,0.06);
+			--shadow-md: 0 14px 30px rgba(2,6,23,0.10);
+			--shadow-lg: 0 25px 60px rgba(2,6,23,0.16);
 		}
 
 		:root.dark-mode{
@@ -26,16 +36,46 @@
 			--muted:#a1a5b4;
 			--text:#e2e8f0;
 			--glass: rgba(30,41,59,0.7);
+			--ring: rgba(59,130,246,0.45);
+			--border: rgba(226,232,240,0.10);
+			--shadow-sm: 0 10px 24px rgba(0,0,0,0.28);
+			--shadow-md: 0 18px 44px rgba(0,0,0,0.34);
+			--shadow-lg: 0 30px 80px rgba(0,0,0,0.45);
 		}
 
 		*{box-sizing:border-box}
-		body{font-family:Inter,Segoe UI,Arial,sans-serif;margin:0;background:linear-gradient(180deg,var(--bg-1),var(--bg-2));color:var(--text);min-height:100vh;transition:background-color .3s ease,color .3s ease}
-		.wrap{max-width:1100px;margin:40px auto;padding:28px}
+		html{scrollbar-gutter:stable}
+		body{font-family:Inter,Segoe UI,Arial,sans-serif;margin:0;background:radial-gradient(1200px 600px at 15% -5%, rgba(37,99,235,0.14), transparent 55%),radial-gradient(900px 500px at 85% 10%, rgba(6,182,212,0.14), transparent 50%),linear-gradient(180deg,var(--bg-1),var(--bg-2));color:var(--text);min-height:100vh;transition:background-color .3s ease,color .3s ease;overflow-x:hidden}
+		.wrap{max-width:1100px;margin:44px auto 64px;padding:28px;position:relative}
+
+		.skip-link{position:absolute;left:12px;top:12px;transform:translateY(-140%);background:var(--card);color:var(--text);border:1px solid rgba(15,23,42,0.12);padding:10px 12px;border-radius:10px;z-index:2000;box-shadow:0 10px 24px rgba(2,6,23,0.12)}
+		.skip-link:focus{transform:translateY(0);outline:none}
+
+		:focus-visible{outline:3px solid var(--ring);outline-offset:3px;border-radius:10px}
+
+		.bg-orb{position:absolute;inset:auto;filter:blur(50px);opacity:0.55;pointer-events:none;z-index:-1}
+		.bg-orb.one{width:520px;height:520px;left:-220px;top:-220px;background:radial-gradient(circle at 30% 30%, rgba(37,99,235,0.55), transparent 60%)}
+		.bg-orb.two{width:520px;height:520px;right:-240px;top:-160px;background:radial-gradient(circle at 30% 30%, rgba(6,182,212,0.55), transparent 60%)}
+		.bg-orb.three{width:540px;height:540px;left:-160px;bottom:-280px;background:radial-gradient(circle at 30% 30%, rgba(16,185,129,0.30), transparent 60%)}
 
 		header{display:flex;align-items:center;justify-content:space-between;gap:18px}
 		.brand{display:flex;flex-direction:column}
-		h1{margin:0;font-size:1.4rem;font-weight:700;letter-spacing:-0.2px}
-		p.lead{margin:6px 0 0;color:var(--muted);font-size:0.95rem}
+		h1{margin:0;font-size:1.7rem;font-weight:800;letter-spacing:-0.5px;line-height:1.1}
+		p.lead{margin:8px 0 0;color:var(--muted);font-size:1.02rem;line-height:1.35}
+
+		.hero{margin-top:16px;padding:18px 18px 16px;border-radius:18px;background:linear-gradient(180deg, rgba(255,255,255,0.65), rgba(255,255,255,0.35));border:1px solid rgba(15,23,42,0.08);backdrop-filter: blur(8px);box-shadow:var(--shadow-sm)}
+		:root.dark-mode .hero{background:linear-gradient(180deg, rgba(30,41,59,0.65), rgba(30,41,59,0.35));border-color:rgba(226,232,240,0.10)}
+		.hero-top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
+		.kicker{display:inline-flex;align-items:center;gap:8px;font-size:0.85rem;color:var(--muted);font-weight:700;letter-spacing:0.2px}
+		.kicker .dot{width:8px;height:8px;border-radius:999px;background:linear-gradient(90deg,var(--accent),var(--accent-2));box-shadow:0 0 0 4px rgba(37,99,235,0.10)}
+		.hero-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+		.btn-secondary{background:transparent;color:var(--text);border:1px solid var(--border);padding:10px 14px;border-radius:12px;cursor:pointer;font-weight:700;transition:transform .15s ease, box-shadow .15s ease, background .15s ease;backdrop-filter: blur(6px)}
+		.btn-secondary:hover{transform:translateY(-2px);background:rgba(15,23,42,0.04);box-shadow:0 10px 20px rgba(2,6,23,0.08)}
+		:root.dark-mode .btn-secondary:hover{background:rgba(255,255,255,0.06)}
+		.hero-meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+		.pill{display:inline-flex;align-items:center;gap:8px;padding:8px 10px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,0.55);color:var(--text);font-size:0.86rem;font-weight:650}
+		:root.dark-mode .pill{background:rgba(0,0,0,0.18)}
+		.pill svg{opacity:0.8}
 
 		.theme-toggle{background:linear-gradient(135deg,#fbbf24,#f97316);border:none;padding:10px 14px;border-radius:10px;cursor:pointer;font-size:1.3rem;display:flex;align-items:center;justify-content:center;width:44px;height:44px;transition:all .2s ease;box-shadow:0 4px 12px rgba(37,99,235,0.2);font-weight:600}
 		.theme-toggle:hover{transform:scale(1.08);box-shadow:0 6px 16px rgba(37,99,235,0.3)}
@@ -44,34 +84,41 @@
 
 		.controls{display:flex;gap:14px;flex-wrap:wrap;margin:18px 0;align-items:center}
 		.search{flex:1;min-width:220px;position:relative}
-		.search input{width:100%;padding:12px 14px 12px 40px;border-radius:12px;border:1px solid rgba(15,23,42,0.06);background:var(--glass);backdrop-filter:blur(6px);color:var(--text)}
+		.search input{width:100%;padding:12px 14px 12px 40px;border-radius:14px;border:1px solid rgba(15,23,42,0.08);background:linear-gradient(180deg, rgba(255,255,255,0.72), rgba(255,255,255,0.55));backdrop-filter:blur(10px);color:var(--text);box-shadow:0 10px 24px rgba(2,6,23,0.06)}
 		.search input::placeholder{color:var(--muted)}
-		:root.dark-mode .search input{border-color:rgba(226,232,240,0.06)}
+		:root.dark-mode .search input{border-color:rgba(226,232,240,0.10);background:linear-gradient(180deg, rgba(30,41,59,0.62), rgba(30,41,59,0.42));box-shadow:0 12px 30px rgba(0,0,0,0.28)}
 		.search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);opacity:0.6}
 
 		.categories{display:flex;gap:8px;flex-wrap:wrap}
-		.cat{background:transparent;border:1px solid transparent;padding:8px 12px;border-radius:999px;cursor:pointer;color:var(--muted);font-weight:600;transition:all .2s ease}
-		.cat.active{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#fff;border-color:transparent;box-shadow:0 6px 18px rgba(37,99,235,0.12)}
+		.cat{background:rgba(255,255,255,0.5);border:1px solid var(--border);padding:9px 12px;border-radius:999px;cursor:pointer;color:var(--muted);font-weight:750;transition:transform .15s ease, box-shadow .15s ease, background .15s ease, color .15s ease;backdrop-filter: blur(8px)}
+		:root.dark-mode .cat{background:rgba(0,0,0,0.16)}
+		.cat:hover{transform:translateY(-2px);box-shadow:0 12px 24px rgba(2,6,23,0.10);color:var(--text)}
+		:root.dark-mode .cat:hover{box-shadow:0 16px 36px rgba(0,0,0,0.35)}
+		.cat.active{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#fff;border-color:transparent;box-shadow:0 14px 30px rgba(37,99,235,0.22)}
 
 		#addTipBtn{background:linear-gradient(90deg,#10b981,#06b6d4);color:#fff;border:0;padding:10px 14px;border-radius:10px;cursor:pointer;box-shadow:0 8px 20px rgba(6,182,212,0.12);font-weight:600}
 
 		.list{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:18px}
-		.tip{background:var(--card);padding:16px;border-radius:12px;border:1px solid rgba(15,23,42,0.04);box-shadow:0 6px 18px rgba(2,6,23,0.06);transition:all .2s ease;cursor:pointer;cursor:grab}
+		.tip{background:linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255,255,255,0.82));padding:16px;border-radius:16px;border:1px solid rgba(15,23,42,0.08);box-shadow:var(--shadow-sm);transition:transform .16s ease, box-shadow .16s ease, border-color .16s ease;cursor:pointer;cursor:grab;position:relative;overflow:hidden}
+		:root.dark-mode .tip{background:linear-gradient(180deg, rgba(30,41,59,0.88), rgba(30,41,59,0.76));border-color:rgba(226,232,240,0.10)}
+		.tip::before{content:"";position:absolute;inset:-2px;pointer-events:none;background:radial-gradient(600px 140px at 20% -10%, rgba(37,99,235,0.20), transparent 60%),radial-gradient(420px 120px at 90% 0%, rgba(6,182,212,0.14), transparent 55%);opacity:0;transition:opacity .16s ease}
 		.tip.dragging{opacity:0.6;cursor:grabbing;transform:scale(0.95) rotateZ(-2deg);box-shadow:0 20px 40px rgba(37,99,235,0.3);background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff !important}
 		.tip.dragging h3{color:#fff}
 		.tip.dragging .tags{opacity:0.8}
 		.tip.drag-over{border:2px dashed var(--accent);background:linear-gradient(180deg,rgba(37,99,235,0.1),transparent);transform:translateY(4px);box-shadow:inset 0 0 0 2px var(--accent);transition:all .15s ease}
 		:root.dark-mode .tip{border-color:rgba(226,232,240,0.04);box-shadow:0 6px 18px rgba(0,0,0,0.3)}
 		:root.dark-mode .tip.dragging{box-shadow:0 20px 40px rgba(59,130,246,0.4)}
-		.tip:hover{transform:translateY(-6px);box-shadow:0 14px 30px rgba(2,6,23,0.08)}
+		.tip:hover{transform:translateY(-6px);box-shadow:var(--shadow-md);border-color:rgba(37,99,235,0.22)}
+		.tip:hover::before{opacity:1}
 		.tip.dragging:hover{transform:scale(0.95) rotateZ(-2deg)}
 		:root.dark-mode .tip:hover{box-shadow:0 14px 30px rgba(0,0,0,0.4)}
 		.tip h3{margin:0 0 6px;font-size:1.02rem}
-		.tags{display:inline-block;font-size:0.82rem;color:var(--muted);margin-bottom:8px;padding:6px 8px;border-radius:8px;background:linear-gradient(180deg,rgba(15,23,42,0.02),transparent)}
+		.tags{display:inline-flex;align-items:center;gap:8px;font-size:0.82rem;color:var(--muted);margin-bottom:8px;padding:7px 10px;border-radius:999px;background:linear-gradient(180deg,rgba(15,23,42,0.03),transparent);border:1px solid rgba(15,23,42,0.06)}
 		:root.dark-mode .tags{background:linear-gradient(180deg,rgba(226,232,240,0.05),transparent)}
 		.steps{font-size:0.95rem;color:var(--text);line-height:1.45}
-		button.copy{margin-top:12px;background:var(--accent);color:#fff;border:0;padding:8px 12px;border-radius:8px;cursor:pointer;font-weight:600;transition:opacity .2s ease}
-		button.copy:hover{opacity:0.9}
+		button.copy{margin-top:12px;background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#fff;border:0;padding:9px 12px;border-radius:12px;cursor:pointer;font-weight:800;transition:transform .15s ease, box-shadow .15s ease, opacity .15s ease}
+		button.copy:hover{transform:translateY(-2px);box-shadow:0 12px 24px rgba(37,99,235,0.24)}
+		button.copy:active{transform:translateY(0)}
 
 		@keyframes shrinkDelete{
 			from{
@@ -91,7 +138,30 @@
 			pointer-events:none;
 		}
 
-		footer{margin-top:28px;color:var(--muted);font-size:0.92rem}
+		.no-results {
+			grid-column: 1 / -1;
+			text-align: center;
+			padding: 40px;
+			color: var(--muted);
+			background: var(--glass);
+			border-radius: 16px;
+			border: 2px dashed rgba(15, 23, 42, 0.1);
+			display: none;
+			flex-direction: column;
+			align-items: center;
+			gap: 12px;
+		}
+		:root.dark-mode .no-results { border-color: rgba(255, 255, 255, 0.1); }
+
+		footer{
+			margin-top: 44px;
+			padding-top: 18px;
+			border-top: 1px solid rgba(15, 23, 42, 0.08);
+			color: var(--muted);
+			font-size: 0.92rem;
+			text-align: center;
+		}
+		:root.dark-mode footer { border-color: rgba(255, 255, 255, 0.06); }
 
 		/* Modal tweaks */
 		#modal{display:none;position:fixed;inset:0;background:linear-gradient(rgba(2,6,23,0.45),rgba(2,6,23,0.45));align-items:center;justify-content:center;padding:20px}
@@ -107,38 +177,226 @@
 
 		#viewModal{display:none;position:fixed;inset:0;background:rgba(2,6,23,0.5);align-items:center;justify-content:center;padding:20px;z-index:100}
 		:root.dark-mode #viewModal{background:rgba(0,0,0,0.7)}
-		#viewModal > div{background:var(--card);border-radius:12px;padding:24px;max-width:600px;width:100%;box-shadow:0 12px 36px rgba(2,6,23,0.15);position:relative;max-height:80vh;overflow-y:auto}
+		#viewModal > div{background:var(--card);border-radius:18px;padding:24px;max-width:600px;width:100%;box-shadow:var(--shadow-lg);position:relative;max-height:80vh;overflow-y:auto}
 		:root.dark-mode #viewModal > div{box-shadow:0 12px 36px rgba(0,0,0,0.5)}
 
-		@media (max-width:520px){.wrap{padding:16px}.list{gap:12px}}
+		@media (max-width:520px){.wrap{padding:16px;margin-top:22px}.list{gap:12px}.hero{padding:14px}}
+
+		/* Modern UI Improvements */
+		.btn-add {
+			background: linear-gradient(135deg, #10b981, #059669);
+			color: #fff;
+			border: 0;
+			padding: 10px 18px;
+			border-radius: 10px;
+			cursor: pointer;
+			font-weight: 600;
+			transition: all 0.2s ease;
+			display: inline-flex;
+			align-items: center;
+			gap: 8px;
+			box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+		}
+		.btn-add:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 6px 16px rgba(16, 185, 129, 0.35);
+		}
+		.btn-add:active { transform: translateY(0); }
+
+		.modal-overlay {
+			display: none;
+			position: fixed;
+			inset: 0;
+			background: rgba(2, 6, 23, 0.6);
+			align-items: center;
+			justify-content: center;
+			padding: 20px;
+			z-index: 1000;
+			backdrop-filter: blur(4px);
+			animation: fadeIn 0.2s ease-out;
+		}
+		:root.dark-mode .modal-overlay { background: rgba(0, 0, 0, 0.75); }
+
+		.modal-content {
+			background: #fff;
+			border-radius: 16px;
+			padding: 28px;
+			max-width: 720px;
+			width: 100%;
+			box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+			position: relative;
+			animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+		}
+		:root.dark-mode .modal-content {
+			background: var(--bg-2);
+			border: 1px solid rgba(255,255,255,0.05);
+		}
+
+		.form-row {
+			display: grid;
+			grid-template-columns: 1fr 200px;
+			gap: 16px;
+			margin-bottom: 16px;
+		}
+		@media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
+
+		.form-control {
+			width: 100%;
+			padding: 12px 16px;
+			border: 1px solid rgba(15, 23, 42, 0.1);
+			border-radius: 10px;
+			background: var(--bg-2);
+			color: var(--text);
+			font-family: inherit;
+			font-size: 0.95rem;
+			transition: all 0.2s ease;
+		}
+		.form-control:focus {
+			outline: none;
+			border-color: var(--accent);
+			box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+			background: var(--card);
+		}
+		:root.dark-mode .form-control {
+			border-color: rgba(255, 255, 255, 0.1);
+			background: rgba(0, 0, 0, 0.2);
+		}
+		:root.dark-mode .form-control:focus {
+			border-color: var(--accent);
+			background: rgba(0, 0, 0, 0.4);
+		}
+
+		.modal-actions {
+			display: flex;
+			gap: 12px;
+			justify-content: flex-end;
+			margin-top: 24px;
+		}
+
+		.btn-cancel {
+			background: transparent;
+			border: 1px solid rgba(15, 23, 42, 0.1);
+			padding: 10px 20px;
+			border-radius: 10px;
+			cursor: pointer;
+			color: var(--text);
+			font-weight: 600;
+			transition: all 0.2s ease;
+		}
+		:root.dark-mode .btn-cancel { border-color: rgba(255, 255, 255, 0.1); }
+		.btn-cancel:hover { background: rgba(15, 23, 42, 0.05); }
+		:root.dark-mode .btn-cancel:hover { background: rgba(255, 255, 255, 0.05); }
+
+		.btn-submit {
+			background: var(--accent);
+			color: #fff;
+			border: 0;
+			padding: 10px 24px;
+			border-radius: 10px;
+			cursor: pointer;
+			font-weight: 600;
+			box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+			transition: all 0.2s ease;
+		}
+		.btn-submit:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
+		}
+
+		.close-modal-btn {
+			position: absolute;
+			top: 20px;
+			right: 20px;
+			background: none;
+			border: none;
+			font-size: 1.2rem;
+			cursor: pointer;
+			color: var(--muted);
+			width: 36px;
+			height: 36px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			border-radius: 50%;
+			transition: all 0.2s ease;
+		}
+		.close-modal-btn:hover {
+			background: rgba(15, 23, 42, 0.05);
+			color: var(--text);
+		}
+		:root.dark-mode .close-modal-btn:hover { background: rgba(255, 255, 255, 0.1); }
+
+		@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+		@keyframes slideUp { from { opacity: 0; transform: translateY(20px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
+		@media (prefers-reduced-motion: reduce){
+			*{animation-duration:0.001ms !important;animation-iteration-count:1 !important;transition-duration:0.001ms !important;scroll-behavior:auto !important}
+		}
 	</style>
 </head>
 <body>
+	<a class="skip-link" href="#main">Skip to content</a>
 	<div class="wrap">
+		<div class="bg-orb one" aria-hidden="true"></div>
+		<div class="bg-orb two" aria-hidden="true"></div>
+		<div class="bg-orb three" aria-hidden="true"></div>
 		<header>
 			<div>
 				<h1>IT Troubleshooting Tips</h1>
-				<p class="lead">Quick, searchable solutions your team can use and share.</p>
+				<p class="lead">Quick, searchable solutions your team can use, share, and keep consistent.</p>
 			</div>
-			<button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
+			<div style="display:flex; gap:12px; align-items:center;">
+				<button id="addTipBtn" class="btn-add" type="button">
+					<svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+					Add Tip
+				</button>
+				<button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" type="button">🌙</button>
+			</div>
 		</header>
-		<div style="margin-top:12px;display:flex;justify-content:space-between;gap:12px;align-items:center">
-			<div style="flex:1"></div>
-			<div>
-				<button id="addTipBtn" style="background:#10b981;color:#fff;border:0;padding:9px 12px;border-radius:8px;cursor:pointer">+ Add Tip</button>
-			</div>
-		</div>
 
+		<section class="hero" aria-label="Overview">
+			<div class="hero-top">
+				<div>
+					<div class="kicker"><span class="dot" aria-hidden="true"></span>Team-ready troubleshooting, in one place</div>
+				</div>
+				<div class="hero-actions">
+					<button class="btn-secondary" type="button" onclick="document.getElementById('q').focus()">Search tips</button>
+					<button class="btn-secondary" type="button" onclick="document.querySelector('.cat.active')?.scrollIntoView({block:'center',behavior:'smooth'})">Browse categories</button>
+				</div>
+			</div>
+			<div class="hero-meta" aria-label="Highlights">
+				<span class="pill">
+					<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2"/></svg>
+					Fast to scan
+				</span>
+				<span class="pill">
+					<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16h8M9 12h6M10 8h4"/><path stroke-linecap="round" stroke-linejoin="round" d="M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+					Search + filter
+				</span>
+				<span class="pill">
+					<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12M8 12h12M8 17h12"/><path stroke-linecap="round" stroke-linejoin="round" d="M4 7h.01M4 12h.01M4 17h.01"/></svg>
+					Drag to reorder
+				</span>
+				<span class="pill">
+					<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16h8M9 12h6M10 8h4"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 21l-7-7a9 9 0 1114 0l-7 7z"/></svg>
+					Saved locally
+				</span>
+			</div>
+		</section>
+		<!-- Removed redundant add button row -->
+
+		<main id="main">
 		<div class="controls">
 			<div class="search">
 				<input id="q" type="text" placeholder="Search titles, descriptions, or steps..." aria-label="Search tips">
+				<svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
 			</div>
 			<div class="categories" role="tablist" aria-label="Categories">
-				<button class="cat active" data-cat="all">All</button>
-				<button class="cat" data-cat="network">Network</button>
-				<button class="cat" data-cat="software">Software</button>
-				<button class="cat" data-cat="hardware">Hardware</button>
-				<button class="cat" data-cat="accounts">Accounts</button>
+				<button class="cat active" data-cat="all" role="tab" aria-selected="true" type="button">All</button>
+				<button class="cat" data-cat="network" role="tab" aria-selected="false" type="button">Network</button>
+				<button class="cat" data-cat="software" role="tab" aria-selected="false" type="button">Software</button>
+				<button class="cat" data-cat="hardware" role="tab" aria-selected="false" type="button">Hardware</button>
+				<button class="cat" data-cat="accounts" role="tab" aria-selected="false" type="button">Accounts</button>
 			</div>
 		</div>
 
@@ -208,49 +466,85 @@
 				</div>
 				<button class="copy">Copy steps</button>
 			</article>
+			
+			<div id="noResults" class="no-results">
+				<svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="opacity:0.5"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
+				<p style="margin:0;font-weight:500">No tips found matching your search.</p>
+				<button onclick="document.getElementById('q').value=''; applyFilter()" style="background:none;border:none;color:var(--accent);cursor:pointer;text-decoration:underline;padding:0;font-size:0.9rem">Clear search</button>
+			</div>
 		</div>
 
 		<footer>
-			Tip: Click a category or type in search to filter tips. Want more features? Ask to add editing and persistence.
+			<p>Tip: Click a category or type in search to filter tips.</p>
+			<p style="opacity:0.7;font-size:0.85rem;margin-top:8px">Drag and drop cards to reorder them.</p>
 		</footer>
+		</main>
 	</div>
 
 	<!-- Add Tip Modal -->
-	<div id="modal" style="display:none;position:fixed;inset:0;background:rgba(2,6,23,0.5);align-items:center;justify-content:center;padding:20px">
-		<form id="tipForm" style="background:#fff;border-radius:10px;padding:18px;max-width:720px;width:100%;box-shadow:0 8px 24px rgba(2,6,23,0.12)">
-			<h2 style="margin:0 0 8px;font-size:1.1rem">Add Troubleshooting Tip</h2>
-			<div style="display:grid;grid-template-columns:1fr 200px;gap:10px;margin-bottom:8px">
-				<input id="tipTitle" placeholder="Title" required style="padding:8px;border:1px solid #e5e7eb;border-radius:6px">
-				<select id="tipCat" style="padding:8px;border:1px solid #e5e7eb;border-radius:6px">
+	<div id="modal" class="modal-overlay">
+		<form id="tipForm" class="modal-content">
+			<h2 style="margin:0 0 16px;font-size:1.4rem;font-weight:700">Add Troubleshooting Tip</h2>
+			<div class="form-row">
+				<input id="tipTitle" class="form-control" placeholder="Title (e.g. Printer Offline)" required>
+				<select id="tipCat" class="form-control">
 					<option value="network">Network</option>
 					<option value="software">Software</option>
 					<option value="hardware">Hardware</option>
 					<option value="accounts">Accounts</option>
 				</select>
 			</div>
-			<textarea id="tipSteps" rows="6" placeholder="Steps (use line breaks for separate steps)" required style="width:100%;padding:8px;border:1px solid #e5e7eb;border-radius:6px"></textarea>
-			<div style="display:flex;gap:8px;justify-content:flex-end;margin-top:10px">
-				<button type="button" id="cancelTip" style="background:#fff;border:1px solid #e5e7eb;padding:8px 12px;border-radius:6px;cursor:pointer">Cancel</button>
-				<button type="submit" style="background:#0b5fff;color:#fff;border:0;padding:8px 12px;border-radius:6px;cursor:pointer">Add Tip</button>
+			<textarea id="tipSteps" class="form-control" rows="6" placeholder="Steps to resolve the issue...&#10;1. First step&#10;2. Second step" required></textarea>
+			<div class="modal-actions">
+				<button type="button" id="cancelTip" class="btn-cancel">Cancel</button>
+				<button type="submit" class="btn-submit">Save Tip</button>
 			</div>
 		</form>
 	</div>
 
 	<!-- View Tip Modal -->
-	<div id="viewModal" style="display:none;position:fixed;inset:0;background:rgba(2,6,23,0.5);align-items:center;justify-content:center;padding:20px;z-index:100">
-		<div style="background:var(--card);border-radius:12px;padding:24px;max-width:600px;width:100%;box-shadow:0 12px 36px rgba(2,6,23,0.15);position:relative;max-height:80vh;overflow-y:auto">
-			<button id="closeViewModal" style="position:absolute;top:16px;right:16px;background:none;border:none;font-size:1.5rem;cursor:pointer;color:var(--muted)">✕</button>
-			<h2 id="viewTipTitle" style="margin:0 0 8px;font-size:1.3rem;padding-right:32px;color:var(--text);font-weight:700"></h2>
-			<div id="viewTipCategory" style="display:inline-block;font-size:0.82rem;color:#fff;margin-bottom:16px;padding:6px 10px;border-radius:8px;background:var(--accent)"></div>
-			<div id="viewTipSteps" style="font-size:0.95rem;color:var(--text);line-height:1.6;margin-bottom:16px;border-top:1px solid rgba(15,23,42,0.1);padding-top:16px"></div>
-			<div style="display:flex;gap:10px">
-				<button id="copyFromModal" style="background:var(--accent);color:#fff;border:0;padding:10px 14px;border-radius:8px;cursor:pointer;font-weight:600">Copy steps</button>
-				<button id="copyLinkToModal" style="background:var(--accent-2);color:#fff;border:0;padding:10px 14px;border-radius:8px;cursor:pointer;font-weight:600">Copy link</button>
+	<div id="viewModal" class="modal-overlay" style="z-index:1100">
+		<div class="modal-content">
+			<button id="closeViewModal" class="close-modal-btn">✕</button>
+			<h2 id="viewTipTitle" style="margin:0 0 12px;font-size:1.5rem;padding-right:40px;color:var(--text);font-weight:700;line-height:1.2"></h2>
+			<div id="viewTipCategory" style="display:inline-block;font-size:0.85rem;color:#fff;margin-bottom:20px;padding:6px 12px;border-radius:20px;background:var(--accent);font-weight:600"></div>
+			<div id="viewTipSteps" style="font-size:1rem;color:var(--text);line-height:1.7;margin-bottom:24px;border-top:1px solid rgba(15,23,42,0.1);padding-top:20px"></div>
+			<div style="display:flex;gap:12px">
+				<button id="copyFromModal" class="btn-submit">Copy steps</button>
+				<button id="copyLinkToModal" class="btn-cancel" style="background:var(--bg-2)">Copy link</button>
 			</div>
 		</div>
 	</div>
-https://misassistant2deportes-png.github.io/PRISM-IT-Tips/
+
+	<!-- Optional DB sync (Supabase). Leave the config empty to use localStorage only. -->
+	<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 	<script>
+		// --------------------
+		// Supabase (optional)
+		// --------------------
+		// 1) Create a Supabase project (free tier).
+		// 2) Create table `tips` with columns:
+		//    - id uuid primary key
+		//    - title text not null
+		//    - cat text not null
+		//    - steps text not null
+		//    - sort_index int not null default 0
+		//    - created_at timestamptz not null default now()
+		// 3) Simplest setup: disable RLS for `tips` (public read/write).
+		//    For private per-user tips, you'd add auth + RLS policies.
+		//
+		// Paste your values here:
+		const SUPABASE_URL = 'https://nedezmpvdprkxfeoxpib.supabase.co';      // e.g. https://xxxx.supabase.co
+		const SUPABASE_ANON_KEY = 'sb_publishable_LbJ1aNJhB_eHSQfg2qKU5g_YozqoaN6'; // your anon public key
+
+		const supabaseClient = (() => {
+			try{
+				if(!SUPABASE_URL || !SUPABASE_ANON_KEY) return null;
+				if(!window.supabase?.createClient) return null;
+				return window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+			}catch(_e){ return null; }
+		})();
+
 		// Theme toggle
 		const themeToggle = document.getElementById('themeToggle');
 		const htmlElement = document.documentElement;
@@ -281,16 +575,114 @@ https://misassistant2deportes-png.github.io/PRISM-IT-Tips/
 
 		function currentTips(){ return Array.from(document.querySelectorAll('.tip')); }
 
+		function escapeHtml(str){
+			return String(str)
+				.replaceAll('&','&amp;')
+				.replaceAll('<','&lt;')
+				.replaceAll('>','&gt;')
+				.replaceAll('"','&quot;')
+				.replaceAll("'",'&#39;');
+		}
+
+		function ensureId(t){
+			if(t && t.id) return t;
+			return {
+				...t,
+				id: (crypto?.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(16).slice(2))
+			};
+		}
+
+		async function dbListTips(){
+			if(!supabaseClient) return null;
+			const { data, error } = await supabaseClient
+				.from('tips')
+				.select('id,title,cat,steps,sort_index,created_at')
+				.order('sort_index', { ascending: true })
+				.order('created_at', { ascending: false });
+			if(error) {
+				// Suppress PGRST205 (table not found) - table may not exist yet
+				if(error.code !== 'PGRST205') {
+					console.warn('Supabase list error:', error);
+				}
+				return null;
+			}
+			return (data || []).map(ensureId);
+		}
+
+		async function dbUpsertTip(t){
+			if(!supabaseClient) return null;
+			const row = ensureId(t);
+			const { data, error } = await supabaseClient
+				.from('tips')
+				.upsert({
+					id: row.id,
+					title: row.title,
+					cat: row.cat,
+					steps: row.steps,
+					sort_index: Number.isFinite(row.sort_index) ? row.sort_index : 0
+				}, { onConflict: 'id' })
+				.select('id,title,cat,steps,sort_index,created_at')
+				.single();
+			if(error){
+				// Suppress PGRST205 (table not found) - table may not exist yet
+				if(error.code !== 'PGRST205') {
+					console.warn('Supabase upsert error:', error);
+				}
+				return null;
+			}
+			return ensureId(data);
+		}
+
+		async function dbDeleteTip(id){
+			if(!supabaseClient) return false;
+			const { error } = await supabaseClient.from('tips').delete().eq('id', id);
+			if(error){
+				// Suppress PGRST205 (table not found) - table may not exist yet
+				if(error.code !== 'PGRST205') {
+					console.warn('Supabase delete error:', error);
+				}
+				return false;
+			}
+			return true;
+		}
+
+		async function dbUpdateSortOrder(idsInOrder){
+			if(!supabaseClient) return false;
+			const updates = idsInOrder.map((id, idx) => ({ id, sort_index: idx }));
+			const { error } = await supabaseClient.from('tips').upsert(updates, { onConflict: 'id' });
+			if(error){
+				// Suppress PGRST205 (table not found) - table may not exist yet
+				if(error.code !== 'PGRST205') {
+					console.warn('Supabase sort update error:', error);
+				}
+				return false;
+			}
+			return true;
+		}
+
 		function applyFilter(){
 			const term = q.value.trim().toLowerCase();
 			const activeCat = document.querySelector('.cat.active')?.dataset.cat || 'all';
+			let visibleCount = 0;
+			
 			currentTips().forEach(t => {
 				const title = t.dataset.title.toLowerCase();
 				const body = t.querySelector('.steps').innerText.toLowerCase();
 				const matchesTerm = !term || title.includes(term) || body.includes(term);
 				const matchesCat = activeCat === 'all' || t.dataset.cat === activeCat;
-				t.style.display = (matchesTerm && matchesCat) ? '' : 'none';
+				
+				if (matchesTerm && matchesCat) {
+					t.style.display = '';
+					visibleCount++;
+				} else {
+					t.style.display = 'none';
+				}
 			});
+
+			const noResults = document.getElementById('noResults');
+			if (noResults) {
+				noResults.style.display = visibleCount === 0 ? 'flex' : 'none';
+			}
 		}
 
 		q.addEventListener('input', applyFilter);
@@ -298,6 +690,7 @@ https://misassistant2deportes-png.github.io/PRISM-IT-Tips/
 		cats.forEach(c => c.addEventListener('click', e => {
 			cats.forEach(x=>x.classList.remove('active'));
 			e.currentTarget.classList.add('active');
+			cats.forEach(x => x.setAttribute('aria-selected', x.classList.contains('active') ? 'true' : 'false'));
 			applyFilter();
 		}));
 
@@ -459,20 +852,25 @@ https://misassistant2deportes-png.github.io/PRISM-IT-Tips/
 			// Close dropdown when clicking delete
 			document.querySelectorAll('.menu-dropdown .delete').forEach(btn => {
 				btn.removeEventListener('click', btn.__deleteHandler);
-				const handler = (e) => {
+				const handler = async (e) => {
 					e.stopPropagation();
 					const tip = e.currentTarget.closest('.tip');
 					const title = tip.dataset.title;
 					const cat = tip.dataset.cat;
+					const tipId = tip.dataset.id;
 					
 					tip.classList.add('deleting');
-					setTimeout(() => {
+					setTimeout(async () => {
 						const raw = localStorage.getItem(STORAGE_KEY);
 						const arr = JSON.parse(raw || '[]');
 						const idx = arr.findIndex(t => t.title === title && t.cat === cat);
 						if(idx >= 0) {
 							arr.splice(idx, 1);
 							localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+							// Also delete from Supabase if connected
+							if(supabaseClient && tipId) {
+								await dbDeleteTip(tipId);
+							}
 							tip.remove();
 							applyFilter();
 						}
@@ -484,69 +882,163 @@ https://misassistant2deportes-png.github.io/PRISM-IT-Tips/
 		}
 
 		// Persistence: save/load to localStorage
-		const STORAGE_KEY = 'it_tips_v1';
+		const STORAGE_KEY = 'it_tips_v2';
 
 		function saveTipsOrder(){
-			const tips = Array.from(document.querySelectorAll('.tip')).map(t => ({
+			const tips = Array.from(document.querySelectorAll('.tip')).map((t, idx) => ({
+				id: t.dataset.id,
 				title: t.dataset.title,
 				cat: t.dataset.cat,
-				steps: t.querySelector('.steps').dataset.raw || t.querySelector('.steps').innerText
+				steps: t.querySelector('.steps').dataset.raw || t.querySelector('.steps').innerText,
+				sort_index: idx
 			}));
 			localStorage.setItem(STORAGE_KEY, JSON.stringify(tips));
+			dbUpdateSortOrder(tips.map(t => t.id));
 		}
 
 		function renderTip(t){
-			const displaySteps = t.steps.replace(/</g,'&lt;').replace(/\n/g,'<br>');
+			const tip = ensureId(t);
+			const safeId = escapeHtml(tip.id);
+			const safeTitle = escapeHtml(tip.title);
+			const safeCat = escapeHtml(tip.cat);
+			const safeStepsRaw = escapeHtml(tip.steps);
+			const displaySteps = safeStepsRaw.replace(/\n/g,'<br>');
 			return `
-				<article class="tip" data-cat="${t.cat}" data-title="${t.title}" draggable="true">
+				<article class="tip" data-id="${safeId}" data-cat="${safeCat}" data-title="${safeTitle}" draggable="true">
 					<div style="display:flex;justify-content:space-between;align-items:start">
 						<div style="flex:1">
-							<h3>${t.title}</h3>
-							<div class="tags">Category: ${capitalize(t.cat)}</div>
+							<h3>${safeTitle}</h3>
+							<div class="tags">Category: ${capitalize(safeCat)}</div>
 						</div>
 						<div style="position:relative">
-							<button class="menu-btn" style="background:none;border:none;color:#6b7280;cursor:pointer;font-size:1.3rem;padding:0;width:32px;height:32px;display:flex;align-items:center;justify-content:center">⋯</button>
+							<button class="menu-btn" type="button" style="background:none;border:none;color:#6b7280;cursor:pointer;font-size:1.3rem;padding:0;width:32px;height:32px;display:flex;align-items:center;justify-content:center" aria-label="Tip menu">⋯</button>
 							<div class="menu-dropdown" style="display:none;position:absolute;top:100%;right:0;background:#fff;border:1px solid #e5e7eb;border-radius:6px;box-shadow:0 4px 12px rgba(0,0,0,0.1);z-index:10;min-width:120px">
-								<button class="edit" style="display:block;width:100%;text-align:left;background:none;border:none;padding:10px 12px;cursor:pointer;color:#374151;font-size:0.9rem;border-bottom:1px solid #f3f4f6">Edit</button>
-								<button class="delete" style="display:block;width:100%;text-align:left;background:none;border:none;padding:10px 12px;cursor:pointer;color:#ef4444;font-size:0.9rem">Delete</button>
+								<button class="edit" type="button" style="display:block;width:100%;text-align:left;background:none;border:none;padding:10px 12px;cursor:pointer;color:#374151;font-size:0.9rem;border-bottom:1px solid #f3f4f6">Edit</button>
+								<button class="delete" type="button" style="display:block;width:100%;text-align:left;background:none;border:none;padding:10px 12px;cursor:pointer;color:#ef4444;font-size:0.9rem">Delete</button>
 							</div>
 						</div>
 					</div>
-					<div class="steps" data-raw="${t.steps.replace(/"/g,'&quot;')}">${displaySteps}</div>
-					<button class="copy">Copy steps</button>
+					<div class="steps" data-raw="${safeStepsRaw}">${displaySteps}</div>
+					<button class="copy" type="button">Copy steps</button>
 				</article>
 			`;
 		}
 
 		function capitalize(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
 
-		function loadStoredTips(){
-			const raw = localStorage.getItem(STORAGE_KEY);
-			if(raw){
-				try{
-					const arr = JSON.parse(raw);
-					tipsContainer.innerHTML = arr.map(renderTip).join('');
-				}catch(e){ console.error('Failed to parse stored tips',e); }
+		// Hardcoded default tips that should always be in the database
+		const DEFAULT_TIPS = [
+			{
+				title: "Can't connect to Wi‑Fi",
+				cat: "network",
+				steps: "1. Confirm Wi‑Fi is enabled on the device.\n2. Forget the SSID and reconnect with correct password.\n3. Reboot the router if multiple devices affected.",
+				sort_index: 0
+			},
+			{
+				title: "Application is slow or freezing",
+				cat: "software",
+				steps: "1. Check Task Manager for high CPU/RAM usage.\n2. Update the app and OS to latest patches.\n3. Clear app cache or reinstall if needed.",
+				sort_index: 1
+			},
+			{
+				title: "Laptop won't power on",
+				cat: "hardware",
+				steps: "1. Verify power adapter LED and outlet.\n2. Remove battery (if removable), hold power 15s, then retry.\n3. If still dead, escalate for hardware repair.",
+				sort_index: 2
+			},
+			{
+				title: "Forgot password or can't sign in",
+				cat: "accounts",
+				steps: "1. Confirm username and caps-lock state.\n2. Reset password via single-sign-on or ticket with IT.\n3. Check account lockout policy if repeated failures.",
+				sort_index: 3
+			},
+			{
+				title: "VPN won't connect",
+				cat: "network",
+				steps: "1. Confirm internet access is available.\n2. Re-enter VPN credentials and ensure MFA completed.\n3. Restart VPN client and check for known outages.",
+				sort_index: 4
+			},
+			{
+				title: "Email not syncing",
+				cat: "software",
+				steps: "1. Check server status and account settings.\n2. Remove and re-add the account or reconfigure Mail client.\n3. If mobile, ensure Background App Refresh / sync enabled.",
+				sort_index: 5
+			}
+		];
+
+		// Ensure default tips are in the database (only adds if they don't exist)
+		async function ensureDefaultTipsInDB(){
+			if(!supabaseClient) return;
+			
+			const dbTips = await dbListTips();
+			if(!dbTips) return; // If DB query failed, skip
+			
+			// Check which default tips are missing
+			const existingTitles = new Set(dbTips.map(t => t.title.toLowerCase()));
+			
+			for(const defaultTip of DEFAULT_TIPS){
+				// Only add if this tip doesn't exist (case-insensitive title match)
+				if(!existingTitles.has(defaultTip.title.toLowerCase())){
+					await dbUpsertTip(ensureId(defaultTip));
+				}
+			}
+		}
+
+		async function loadStoredTips(){
+			const dbTips = await dbListTips();
+			if(dbTips && dbTips.length){
+				const normalized = dbTips
+					.map((t, i) => ({...ensureId(t), sort_index: Number.isFinite(t.sort_index) ? t.sort_index : i}))
+					.sort((a,b)=>(a.sort_index ?? 0) - (b.sort_index ?? 0));
+				tipsContainer.innerHTML = normalized.map(renderTip).join('');
+				localStorage.setItem(STORAGE_KEY, JSON.stringify(normalized));
 			} else {
-				// gather existing DOM tips and seed storage
-				const existing = currentTips().map(t=>({
-					title: t.dataset.title || t.querySelector('h3')?.innerText || 'Untitled',
-					cat: t.dataset.cat || 'software',
-					steps: t.querySelector('.steps')?.innerText || ''
-				}));
-				if(existing.length) localStorage.setItem(STORAGE_KEY, JSON.stringify(existing));
+				const raw = localStorage.getItem(STORAGE_KEY);
+				if(raw){
+					try{
+						const arr = JSON.parse(raw).map(ensureId);
+						const normalized = arr
+							.map((t, i) => ({...t, sort_index: Number.isFinite(t.sort_index) ? t.sort_index : i}))
+							.sort((a,b)=>(a.sort_index ?? 0) - (b.sort_index ?? 0));
+						tipsContainer.innerHTML = normalized.map(renderTip).join('');
+						localStorage.setItem(STORAGE_KEY, JSON.stringify(normalized));
+					}catch(e){ console.error('Failed to parse stored tips',e); }
+				} else {
+					// gather existing DOM tips and seed storage (and DB if enabled)
+					const existing = currentTips().map((t, idx)=>(ensureId({
+						title: t.dataset.title || t.querySelector('h3')?.innerText || 'Untitled',
+						cat: t.dataset.cat || 'software',
+						steps: t.querySelector('.steps')?.innerText || '',
+						sort_index: idx
+					})));
+					tipsContainer.innerHTML = existing.map(renderTip).join('');
+					if(existing.length){
+						localStorage.setItem(STORAGE_KEY, JSON.stringify(existing));
+						if(supabaseClient){
+							for(const tip of existing){ await dbUpsertTip(tip); }
+						}
+					}
+				}
 			}
 			attachCopyButtons();
 			attachMenuButtons();
 			attachTipClickHandlers();
 			attachDragHandlers();
+			
+			// Ensure default tips are always in the database
+			await ensureDefaultTipsInDB();
 		}
 
-		function saveTipToStorage(obj){
+		async function saveTipToStorage(obj){
 			const raw = localStorage.getItem(STORAGE_KEY);
 			const arr = raw ? JSON.parse(raw) : [];
-			arr.unshift(obj);
+			const tipWithId = ensureId(obj);
+			arr.unshift(tipWithId);
 			localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+			// Also save to Supabase if connected
+			if(supabaseClient) {
+				await dbUpsertTip(tipWithId);
+			}
 		}
 
 		// Modal handlers
@@ -599,7 +1091,7 @@ https://misassistant2deportes-png.github.io/PRISM-IT-Tips/
 			});
 		}
 
-		tipForm.addEventListener('submit', e=>{
+		tipForm.addEventListener('submit', async e=>{
 			e.preventDefault();
 			const title = document.getElementById('tipTitle').value.trim();
 			const cat = document.getElementById('tipCat').value;
@@ -615,8 +1107,13 @@ https://misassistant2deportes-png.github.io/PRISM-IT-Tips/
 				const arr = JSON.parse(raw || '[]');
 				const idx = arr.findIndex(t => t.title === editingTitle && t.cat === editingCat);
 				if(idx >= 0) {
-					arr[idx] = {title, cat, steps};
+					const updatedTip = ensureId({...arr[idx], title, cat, steps});
+					arr[idx] = updatedTip;
 					localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+					// Also update in Supabase if connected
+					if(supabaseClient) {
+						await dbUpsertTip(updatedTip);
+					}
 					loadStoredTips();
 					applyFilter();
 				}
@@ -625,7 +1122,7 @@ https://misassistant2deportes-png.github.io/PRISM-IT-Tips/
 			} else {
 				// Add new tip
 				const tipObj = {title, cat, steps};
-				saveTipToStorage(tipObj);
+				await saveTipToStorage(tipObj);
 				tipsContainer.insertAdjacentHTML('afterbegin', renderTip(tipObj));
 				attachCopyButtons();
 				attachMenuButtons();
