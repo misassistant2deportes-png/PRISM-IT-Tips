@@ -56,9 +56,15 @@
 		#addTipBtn{background:linear-gradient(90deg,#10b981,#06b6d4);color:#fff;border:0;padding:10px 14px;border-radius:10px;cursor:pointer;box-shadow:0 8px 20px rgba(6,182,212,0.12);font-weight:600}
 
 		.list{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:18px}
-		.tip{background:var(--card);padding:16px;border-radius:12px;border:1px solid rgba(15,23,42,0.04);box-shadow:0 6px 18px rgba(2,6,23,0.06);transition:transform .18s ease,box-shadow .18s ease;cursor:pointer}
+		.tip{background:var(--card);padding:16px;border-radius:12px;border:1px solid rgba(15,23,42,0.04);box-shadow:0 6px 18px rgba(2,6,23,0.06);transition:all .2s ease;cursor:pointer;cursor:grab}
+		.tip.dragging{opacity:0.6;cursor:grabbing;transform:scale(0.95) rotateZ(-2deg);box-shadow:0 20px 40px rgba(37,99,235,0.3);background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff !important}
+		.tip.dragging h3{color:#fff}
+		.tip.dragging .tags{opacity:0.8}
+		.tip.drag-over{border:2px dashed var(--accent);background:linear-gradient(180deg,rgba(37,99,235,0.1),transparent);transform:translateY(4px);box-shadow:inset 0 0 0 2px var(--accent);transition:all .15s ease}
 		:root.dark-mode .tip{border-color:rgba(226,232,240,0.04);box-shadow:0 6px 18px rgba(0,0,0,0.3)}
+		:root.dark-mode .tip.dragging{box-shadow:0 20px 40px rgba(59,130,246,0.4)}
 		.tip:hover{transform:translateY(-6px);box-shadow:0 14px 30px rgba(2,6,23,0.08)}
+		.tip.dragging:hover{transform:scale(0.95) rotateZ(-2deg)}
 		:root.dark-mode .tip:hover{box-shadow:0 14px 30px rgba(0,0,0,0.4)}
 		.tip h3{margin:0 0 6px;font-size:1.02rem}
 		.tags{display:inline-block;font-size:0.82rem;color:var(--muted);margin-bottom:8px;padding:6px 8px;border-radius:8px;background:linear-gradient(180deg,rgba(15,23,42,0.02),transparent)}
@@ -324,6 +330,74 @@
 			});
 		}
 
+		let draggedTip = null;
+
+		function attachDragHandlers(){
+			document.querySelectorAll('.tip').forEach(tipEl => {
+				tipEl.removeEventListener('dragstart', tipEl.__dragstart);
+				tipEl.removeEventListener('dragend', tipEl.__dragend);
+				tipEl.removeEventListener('dragover', tipEl.__dragover);
+				tipEl.removeEventListener('dragenter', tipEl.__dragenter);
+				tipEl.removeEventListener('dragleave', tipEl.__dragleave);
+				tipEl.removeEventListener('drop', tipEl.__drop);
+
+				tipEl.__dragstart = (e) => {
+					draggedTip = tipEl;
+					tipEl.classList.add('dragging');
+					e.dataTransfer.effectAllowed = 'move';
+				};
+
+				tipEl.__dragend = (e) => {
+					tipEl.classList.remove('dragging');
+					document.querySelectorAll('.tip').forEach(t => t.classList.remove('drag-over'));
+					draggedTip = null;
+				};
+
+				tipEl.__dragover = (e) => {
+					if(draggedTip && draggedTip !== tipEl) {
+						e.preventDefault();
+						e.dataTransfer.dropEffect = 'move';
+					}
+				};
+
+				tipEl.__dragenter = (e) => {
+					if(draggedTip && draggedTip !== tipEl) {
+						tipEl.classList.add('drag-over');
+					}
+				};
+
+				tipEl.__dragleave = (e) => {
+					tipEl.classList.remove('drag-over');
+				};
+
+				tipEl.__drop = (e) => {
+					e.preventDefault();
+					if(draggedTip && draggedTip !== tipEl) {
+						const container = tipsContainer;
+						const draggedIndex = Array.from(container.children).indexOf(draggedTip);
+						const targetIndex = Array.from(container.children).indexOf(tipEl);
+						
+						if(draggedIndex < targetIndex) {
+							tipEl.parentNode.insertBefore(draggedTip, tipEl.nextSibling);
+						} else {
+							tipEl.parentNode.insertBefore(draggedTip, tipEl);
+						}
+						saveTipsOrder();
+						applyFilter();
+					}
+					tipEl.classList.remove('drag-over');
+				};
+
+				tipEl.addEventListener('dragstart', tipEl.__dragstart);
+				tipEl.addEventListener('dragend', tipEl.__dragend);
+				tipEl.addEventListener('dragover', tipEl.__dragover);
+				tipEl.addEventListener('dragenter', tipEl.__dragenter);
+				tipEl.addEventListener('dragleave', tipEl.__dragleave);
+				tipEl.addEventListener('drop', tipEl.__drop);
+			});
+		}
+		}
+
 		function attachMenuButtons(){
 			document.querySelectorAll('.menu-btn').forEach(btn => {
 				btn.removeEventListener('click', btn.__menuHandler);
@@ -391,10 +465,19 @@
 		// Persistence: save/load to localStorage
 		const STORAGE_KEY = 'it_tips_v1';
 
+		function saveTipsOrder(){
+			const tips = Array.from(document.querySelectorAll('.tip')).map(t => ({
+				title: t.dataset.title,
+				cat: t.dataset.cat,
+				steps: t.querySelector('.steps').dataset.raw
+			}));
+			localStorage.setItem(STORAGE_KEY, JSON.stringify(tips));
+		}
+
 		function renderTip(t){
 			const displaySteps = t.steps.replace(/</g,'&lt;').replace(/\n/g,'<br>');
 			return `
-				<article class="tip" data-cat="${t.cat}" data-title="${t.title}">
+				<article class="tip" data-cat="${t.cat}" data-title="${t.title}" draggable="true">
 					<div style="display:flex;justify-content:space-between;align-items:start">
 						<div style="flex:1">
 							<h3>${t.title}</h3>
@@ -435,6 +518,7 @@
 			attachCopyButtons();
 			attachMenuButtons();
 			attachTipClickHandlers();
+			attachDragHandlers();
 		}
 
 		function saveTipToStorage(obj){
@@ -504,6 +588,7 @@
 				attachCopyButtons();
 				attachMenuButtons();
 				attachTipClickHandlers();
+				attachDragHandlers();
 				applyFilter();
 			}
 			tipForm.reset();
