@@ -383,7 +383,6 @@ https://misassistant2deportes-png.github.io/PRISM-IT-Tips/
 							tipEl.parentNode.insertBefore(draggedTip, tipEl);
 						}
 						saveTipsOrder();
-						applyFilter();
 					}
 					tipEl.classList.remove('drag-over');
 				};
@@ -469,7 +468,7 @@ https://misassistant2deportes-png.github.io/PRISM-IT-Tips/
 			const tips = Array.from(document.querySelectorAll('.tip')).map(t => ({
 				title: t.dataset.title,
 				cat: t.dataset.cat,
-				steps: t.querySelector('.steps').dataset.raw
+				steps: t.querySelector('.steps').dataset.raw || t.querySelector('.steps').innerText
 			}));
 			localStorage.setItem(STORAGE_KEY, JSON.stringify(tips));
 		}
